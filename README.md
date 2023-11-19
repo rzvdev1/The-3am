@@ -47,7 +47,7 @@ $ xcodebuild test -scheme YourProjectScheme
 ```
 
 ## App Demo
-![App](./Xcode)
+![App](./Xcode.png)
 
 ## Authors
 
