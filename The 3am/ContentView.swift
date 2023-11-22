@@ -10,29 +10,31 @@ import URLImage
 
 struct ContentView: View {
     @State private var isRunning = false
+    @State private var shouldLoadImage = true
     @State private var timer: Timer? = nil
     @State private var secondsElapsed = 0
     @State private var distanceRun = 0.0
 
     let speed = 6.0
-    //use Image Address
     let url: URL = URL(string: "https://images.unsplash.com/photo-1544764200-d834fd210a23?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")!
 
     var body: some View {
         VStack {
-            URLImage(url) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
+            if shouldLoadImage {
+                URLImage(url) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                }
             }
-            
+
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
-            Text("LETS GO!")
-            Text("Seconds: \(secondsElapsed)")
-            Text("Distance: \(distanceRun, specifier: "%.2f") miles")
-            
+            Text("LETS GO!").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+            Text("Seconds: \(secondsElapsed)").font(.title2)
+            Text("Distance: \(distanceRun, specifier: "%.2f") miles").font(.title2)
+
             HStack {
                 Button(action: {
                     startRun()
@@ -57,8 +59,13 @@ struct ContentView: View {
         }
         .padding()
         .preferredColorScheme(.dark)
+        .onChange(of: isRunning) { newValue in
+            print("isRunning changed to: \(newValue)")
+            shouldLoadImage = !newValue
+        }
+
     }
-    
+
     func startRun() {
         print("Run started")
         isRunning = true
